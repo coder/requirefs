@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "amd",
     "moduleResolution": "node",
     "strict": true,
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "outDir": "out",
+    "outFile": "out/requirefs.js",
     "declaration": true
   },
   "include": [
