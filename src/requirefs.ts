@@ -46,14 +46,14 @@ export class RequireFS extends Resolver {
    * Attempt to require the provided path. If the path requires another path, it
    * will recursively follow the dependency tree and return any exported data.
    */
-  private doRequire(importPath: string, filePath: string): Module {
+  private doRequire(importPath: string, directoryPath: string): Module {
     // Use just the last element of the resolve path for the custom module name.
     const customModName = path.basename(importPath)
     if (this.customModules.has(customModName)) {
       return this.customModules.get(customModName)
     }
 
-    const resolvedPath = this.resolvePath(importPath, filePath)
+    const resolvedPath = this.resolvePath(importPath, directoryPath)
     if (this.requireCache.has(resolvedPath)) {
       return this.requireCache.get(resolvedPath).exports
     }
@@ -71,7 +71,7 @@ export class RequireFS extends Resolver {
       if (typeof nativeModule !== "undefined" && nativeModule !== null) {
         return nativeModule
       }
-      return this.doRequire(target, resolvedPath)
+      return this.doRequire(target, path.dirname(resolvedPath))
     }
 
     const content = this.readFile(resolvedPath)

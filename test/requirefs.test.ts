@@ -84,5 +84,9 @@ for (let i = 0; i < tests.length; ++i) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       assert.equal(rfs.require("./requirePath"), require("path"))
     })
+
+    it("should resolve root", () => {
+      assert.equal(rfs.require("."), "root")
+    })
   })
 }

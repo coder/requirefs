@@ -20,10 +20,10 @@ export abstract class Resolver {
   protected abstract readFile(filePath: string): string
 
   /**
-   * Normalize and resolve importPath from filePath.
+   * Normalize and resolve importPath from directoryPath.
    */
-  protected resolvePath(importPath: string, filePath: string): string {
-    const basePath = path.dirname(path.normalize(filePath))
+  protected resolvePath(importPath: string, directoryPath: string): string {
+    const basePath = path.normalize(directoryPath)
     if (this.isRelativePath(importPath)) {
       const candidate = this.maybeResolvePath(importPath, basePath)
       if (candidate) {
@@ -36,7 +36,7 @@ export abstract class Resolver {
       }
     }
 
-    throw new Error(`Unable to resolve ${importPath} from ${filePath}`)
+    throw new Error(`Unable to resolve ${importPath} from ${directoryPath}`)
   }
 
   private isRelativePath(importPath: string): boolean {

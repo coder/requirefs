@@ -31,67 +31,58 @@ describe("resolver", () => {
   const resolver = new TestResolver()
 
   it("should resolve relative paths", () => {
+    assert.equal(resolver.resolve("./lib/scope", __dirname), path.join(__dirname, "./lib/scope.js"))
+    assert.equal(resolver.resolve("./scope", path.join(__dirname, "lib")), path.join(__dirname, "./lib/scope.js"))
     assert.equal(
-      resolver.resolve("./lib/scope", path.join(__dirname, "./index.js")),
-      path.join(__dirname, "./lib/scope.js")
-    )
-    assert.equal(
-      resolver.resolve("./scope", path.join(__dirname, "./lib/index.js")),
-      path.join(__dirname, "./lib/scope.js")
-    )
-    assert.equal(
-      resolver.resolve("./lib/subfolder/deepfolder/nodeResolveNested", path.join(__dirname, "index.js")),
+      resolver.resolve("./lib/subfolder/deepfolder/nodeResolveNested", __dirname),
       path.join(__dirname, "./lib/subfolder/deepfolder/nodeResolveNested.js")
     )
     assert.equal(
-      resolver.resolve("../../baseFolder/baseModule", path.join(__dirname, "./lib/subfolder/deepfolder/index.js")),
+      resolver.resolve("../../baseFolder/baseModule", path.join(__dirname, "./lib/subfolder/deepfolder")),
       path.join(__dirname, "./lib/baseFolder/baseModule.js")
     )
     assert.equal(
-      resolver.resolve("../goingUp", path.join(__dirname, "./lib/subfolder/deepfolder/index.js")),
+      resolver.resolve("../goingUp", path.join(__dirname, "./lib/subfolder/deepfolder")),
       path.join(__dirname, "./lib/subfolder/goingUp.js")
     )
     assert.equal(
-      resolver.resolve("./nodeResolveOverload", path.join(__dirname, "./lib/subfolder/deepfolder/index.js")),
+      resolver.resolve("./nodeResolveOverload", path.join(__dirname, "./lib/subfolder/deepfolder")),
       path.join(__dirname, "./lib/subfolder/deepfolder/nodeResolveOverload.js")
     )
   })
 
   it("should resolve non-relative paths", () => {
     assert.equal(
-      resolver.resolve("frogger", path.join(__dirname, "./lib/index.js")),
+      resolver.resolve("frogger", path.join(__dirname, "./lib")),
       path.join(__dirname, "./lib/node_modules/frogger/index.js")
     )
     assert.equal(
-      resolver.resolve("custom-overload", path.join(__dirname, "./lib/index.js")),
+      resolver.resolve("custom-overload", path.join(__dirname, "./lib")),
       path.join(__dirname, "./lib/node_modules/custom-overload/custom-overload.js")
     )
     assert.equal(
-      resolver.resolve("mod", path.join(__dirname, "./lib/index.js")),
+      resolver.resolve("mod", path.join(__dirname, "./lib")),
       path.join(__dirname, "./lib/node_modules/mod/index.js")
     )
   })
 
   it("should resolve using package.json", () => {
-    assert.equal(resolver.resolve("./lib", path.join(__dirname, "./index.js")), path.join(__dirname, "./lib/index.js"))
+    assert.equal(resolver.resolve("./lib", __dirname), path.join(__dirname, "./lib/index.js"))
     assert.throws(
-      () => resolver.resolve("./lib/subfolder/deepfolder", path.join(__dirname, "index.js")),
+      () => resolver.resolve("./lib/subfolder/deepfolder", __dirname),
       /Unable to resolve/ // Because `main` is a directory.
     )
   })
 
   it("should resolve using index", () => {
     assert.equal(
-      resolver.resolve("./baseFolder", path.join(__dirname, "./lib/index.js")),
+      resolver.resolve("./baseFolder", path.join(__dirname, "./lib")),
       path.join(__dirname, "./lib/baseFolder/index.js")
     )
   })
 
   it("should fail to resolve", () => {
-    assert.throws(
-      () => resolver.resolve("./does-not-exist", path.join(__dirname, "./lib/index.js")),
-      /Unable to resolve/
-    )
+    assert.throws(() => resolver.resolve("./does-not-exist", path.join(__dirname, "./lib")), /Unable to resolve/)
     assert.throws(
       () => resolver.resolve("./foobar", path.join(__dirname, "./lib/subfolder/deepfolder")),
       /Unable to resolve/
@@ -99,14 +90,15 @@ describe("resolver", () => {
   })
 
   it("should resolve with a relative base path", () => {
-    assert.equal(resolver.resolve("./baseFolder", "./lib/index.js"), "lib/baseFolder/index.js")
+    assert.equal(resolver.resolve("./baseFolder", "./lib"), "lib/baseFolder/index.js")
     assert.equal(resolver.resolve("./lib/baseFolder", "."), "lib/baseFolder/index.js")
-    assert.equal(resolver.resolve("./test/lib/baseFolder", "../index.js"), "../test/lib/baseFolder/index.js")
+    assert.equal(resolver.resolve("./test/lib/baseFolder", ".."), "../test/lib/baseFolder/index.js")
+    assert.equal(resolver.resolve(".", "./lib"), "lib/index.js")
   })
 
   it("should normalized paths", () => {
     assert.equal(
-      resolver.resolve(".////baseFolder/../baseFolder", ".///lib/baseFolder///../baseFolder///../index.js"),
+      resolver.resolve(".////baseFolder/../baseFolder", ".///lib/baseFolder///../baseFolder///.."),
       "lib/baseFolder/index.js"
     )
   })
