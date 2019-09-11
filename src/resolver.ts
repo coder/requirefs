@@ -1,4 +1,4 @@
-import * as path from "path"
+import * as path from "../lib/path"
 
 export abstract class Resolver {
   private _extensions: string[] = []
@@ -48,7 +48,7 @@ export abstract class Resolver {
   }
 
   private maybeResolvePath(importPath: string, basePath: string): string | undefined {
-    const filePath = path.normalize(path.join(basePath, importPath))
+    const filePath = path.join(basePath, importPath)
     return (this.isMaybeFilePath(importPath) && this.maybeResolveFile(filePath)) || this.maybeResolveDirectory(filePath)
   }
 

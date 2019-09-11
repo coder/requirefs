@@ -1,4 +1,4 @@
-import * as path from "path"
+import * as path from "../lib/path"
 import { Reader } from "./reader"
 
 export interface TarHeader {

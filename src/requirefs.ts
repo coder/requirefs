@@ -1,6 +1,6 @@
-import * as path from "path"
-import { Tar } from "./tar"
+import * as path from "../lib/path"
 import { Resolver } from "./resolver"
+import { Tar } from "./tar"
 
 type Module = any // eslint-disable-line @typescript-eslint/no-explicit-any
 
