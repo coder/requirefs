@@ -32,7 +32,7 @@ export class Tar {
     const tar = new Tar()
     let file: TarFile | undefined
     while ((file = Tar.getNextFile(reader))) {
-      tar.files.set(path.normalize(file.header.name), file)
+      tar.files.set(path.normalize(/^\.\.?$/.test(file.header.name) ? file.header.name + "/" : file.header.name), file)
     }
     reader.unclamp()
     return tar
