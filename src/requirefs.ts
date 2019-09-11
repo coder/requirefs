@@ -1,5 +1,4 @@
 import * as path from "path"
-import * as Zip from "jszip"
 import { Tar } from "./tar"
 import { Resolver } from "./resolver"
 
@@ -63,7 +62,6 @@ export class RequireFS extends Resolver {
     let exports = module.exports
 
     /* eslint-disable @typescript-eslint/no-unused-vars */
-    /* eslint-disable @typescript-eslint/ban-ts-ignore */
     // @ts-ignore
     const __dirname = path.dirname(resolvedPath)
 
@@ -76,7 +74,6 @@ export class RequireFS extends Resolver {
       return this.doRequire(target, path.dirname(resolvedPath))
     }
     /* eslint-enable @typescript-eslint/no-unused-vars */
-    /* eslint-enable @typescript-eslint/ban-ts-ignore */
 
     const content = this.readFile(resolvedPath)
     if (/\.json$/.test(resolvedPath)) {
@@ -136,7 +133,8 @@ export const fromTar = (content: Uint8Array): RequireFS => {
  * Return a readable and requirable file system from a zip.
  */
 export const fromZip = (content: Uint8Array): RequireFS => {
-  const zip = new Zip(content)
+  // @ts-ignore
+  const zip = new (require("jszip") as typeof import("jszip"))(content)
   return new RequireFS({
     exists: (filePath: string): boolean => {
       return !!zip.file(filePath)

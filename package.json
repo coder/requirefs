@@ -1,6 +1,6 @@
 {
   "name": "@coder/requirefs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "author": "Coder",
   "description": "Create a readable and requirable file system from tars, zips, or a custom provider.",
@@ -31,7 +31,9 @@
     "typescript": "~3.5.0"
   },
   "dependencies": {
-    "jszip": "2.6.0",
     "tar-stream": "^2.1.0"
+  },
+  "optionalDependencies": {
+    "jszip": "2.6.0"
   }
 }

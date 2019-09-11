@@ -21,3 +21,5 @@ extends:
 rules:
   # For overloads.
   no-dupe-class-members: off
+
+  "@typescript-eslint/ban-ts-ignore": off
