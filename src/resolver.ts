@@ -12,7 +12,7 @@ export abstract class Resolver {
    */
   public set extensions(extensions: string[]) {
     this._extensions = extensions.map((extension) => {
-      return extension.startsWith(".") ? extension : `.${extension}`
+      return /^\./.test(extension) ? extension : `.${extension}`
     })
   }
 

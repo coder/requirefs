@@ -62,10 +62,12 @@ export class RequireFS extends Resolver {
     const module = { exports: {} }
     let exports = module.exports
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    /* eslint-disable @typescript-eslint/ban-ts-ignore */
+    // @ts-ignore
     const __dirname = path.dirname(resolvedPath)
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // @ts-ignore
     const require = (target: string): Module => {
       const nativeModule = this.tryNativeRequire(target)
       if (typeof nativeModule !== "undefined" && nativeModule !== null) {
@@ -73,9 +75,11 @@ export class RequireFS extends Resolver {
       }
       return this.doRequire(target, path.dirname(resolvedPath))
     }
+    /* eslint-enable @typescript-eslint/no-unused-vars */
+    /* eslint-enable @typescript-eslint/ban-ts-ignore */
 
     const content = this.readFile(resolvedPath)
-    if (resolvedPath.endsWith(".json")) {
+    if (/\.json$/.test(resolvedPath)) {
       exports = JSON.parse(content)
     } else {
       eval(`'use strict'; ${content}`)
@@ -116,7 +120,7 @@ export const fromTar = (content: Uint8Array): RequireFS => {
   const tar = Tar.fromUint8Array(content)
   return new RequireFS({
     exists: (filePath: string): boolean => {
-      return !filePath.endsWith("/") && !!tar.getFile(filePath)
+      return !/\/$/.test(filePath) && !!tar.getFile(filePath)
     },
     read: (filePath: string): string => {
       const file = tar.getFile(filePath)
