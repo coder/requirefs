@@ -14,7 +14,7 @@ const response = await fetch(uri)
 if (response.status !== 200) {
   throw new Error("failed to download")
 }
-const rfs = fromTar(new Uint8Array(response.arrayBuffer()))
+const rfs = fromTar(new Uint8Array(await response.arrayBuffer()))
 // Use rfs.provide() to provide any necessary modules.
 rfs.require(".")
 ```
