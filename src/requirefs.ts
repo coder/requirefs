@@ -65,6 +65,11 @@ export class RequireFS extends Resolver {
     // @ts-ignore
     const __dirname = path.dirname(resolvedPath)
 
+    // Some modules will try to use `define` if it exists (lodash) and we only
+    // want modules using our custom-provided `require` function.
+    // @ts-ignore
+    const define = undefined
+
     // @ts-ignore
     const require = (target: string): Module => {
       const nativeModule = this.tryNativeRequire(target)
