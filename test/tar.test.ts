@@ -15,6 +15,7 @@ describe("tar", () => {
     const libPath = path.join(__dirname, "lib")
 
     const testDirectory = async (dirPath: string): Promise<void> => {
+      assert.equal(tar.getFile(path.normalize(path.relative(libPath, dirPath)) + "/"), undefined)
       const children = await util.promisify(fs.readdir)(dirPath)
       for (let i = 0; i < children.length; ++i) {
         const absolutePath = path.join(dirPath, children[i])
@@ -23,17 +24,16 @@ describe("tar", () => {
         if (stat.isDirectory()) {
           relativePath += "/"
           testDirectory(absolutePath)
-        }
-        const file = tar.getFile(relativePath)
-        assert.notEqual(file, undefined)
-        if (file && stat.isFile()) {
-          assert.deepEqual(file.read(), await util.promisify(fs.readFile)(absolutePath))
+        } else {
+          const file = tar.getFile(relativePath)
+          assert.notEqual(file, undefined)
+          if (file && stat.isFile()) {
+            assert.deepEqual(file.read(), await util.promisify(fs.readFile)(absolutePath))
+          }
         }
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    assert.equal(tar.getFile("./")!.header.name, "./")
     await testDirectory(libPath)
   })
 })

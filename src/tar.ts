@@ -1,9 +1,15 @@
 import * as path from "../lib/path"
 import { Reader } from "./reader"
 
+enum Type {
+  Dir,
+  File,
+}
+
 export interface TarHeader {
   readonly size: number
   readonly name: string
+  readonly type: Type
 }
 
 export class TarFile {
@@ -32,7 +38,9 @@ export class Tar {
     const tar = new Tar()
     let file: TarFile | undefined
     while ((file = Tar.getNextFile(reader))) {
-      tar.files.set(path.normalize(/^\.\.?$/.test(file.header.name) ? file.header.name + "/" : file.header.name), file)
+      if (file.header.type === Type.File) {
+        tar.files.set(path.normalize(file.header.name), file)
+      }
     }
     reader.unclamp()
     return tar
@@ -82,6 +90,7 @@ export class Tar {
     return {
       name: (prefix ? prefix + "/" : "") + reader.jump(0).read(100, "utf8"),
       size: parseInt(reader.jump(124).read(12, "utf8") || "0", 8),
+      type: reader.jump(156).read(1)[0] === 53 ? Type.Dir : Type.File,
     }
   }
 }

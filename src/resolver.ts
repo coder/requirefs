@@ -43,13 +43,9 @@ export abstract class Resolver {
     return /^\.\.?(\/|$)/.test(importPath)
   }
 
-  private isMaybeFilePath(importPath: string): boolean {
-    return !/^\.\.?$|\/$/.test(importPath)
-  }
-
   private maybeResolvePath(importPath: string, basePath: string): string | undefined {
     const filePath = path.join(basePath, importPath)
-    return (this.isMaybeFilePath(importPath) && this.maybeResolveFile(filePath)) || this.maybeResolveDirectory(filePath)
+    return this.maybeResolveFile(filePath) || this.maybeResolveDirectory(filePath)
   }
 
   /**
@@ -77,8 +73,7 @@ export abstract class Resolver {
   private maybeResolveDirectory(directoryPath: string): string | undefined {
     const json = this.maybeGetPackageJson(directoryPath)
     if (json && json.main) {
-      const main = !this.isMaybeFilePath(json.main) ? path.join(json.main, "index") : json.main
-      return this.maybeResolveFile(path.join(directoryPath, main))
+      return this.maybeResolveFile(path.join(directoryPath, json.main))
     }
     return this.maybeResolveFile(path.join(directoryPath, "index"))
   }

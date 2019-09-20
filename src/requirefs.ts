@@ -117,7 +117,7 @@ export const fromTar = (content: Uint8Array): RequireFS => {
   const tar = Tar.fromUint8Array(content)
   return new RequireFS({
     exists: (filePath: string): boolean => {
-      return !/\/$/.test(filePath) && !!tar.getFile(filePath)
+      return !!tar.getFile(filePath)
     },
     read: (filePath: string): string => {
       const file = tar.getFile(filePath)
