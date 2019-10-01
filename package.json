@@ -1,16 +1,17 @@
 {
   "name": "@coder/requirefs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "author": "Coder",
   "description": "Create a readable and requirable file system from tars, zips, or a custom provider.",
-  "main": "./out/requirefs",
+  "main": "./out/src/requirefs",
+  "types": "./out/src/requirefs.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register -r amd-loader ./test/*.test.ts",
     "lint": "eslint {src,test}/*.ts",
     "generateZip": "rm -f ./test/lib.zip && cd ./test/lib && zip -r ../lib.zip ./*",
     "generateTar": "rm -f ./test/lib.tar && tar -cf ./test/lib.tar -C ./test/lib .",
-    "prepare": "tsc"
+    "prepublishOnly": "rm -rf ./out && tsc"
   },
   "devDependencies": {
     "@types/jszip": "0.0.21-alpha",

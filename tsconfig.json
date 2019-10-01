@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "amd",
-    "moduleResolution": "node",
+    "module": "umd",
     "strict": true,
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
-    "sourceMap": true,
-    "outFile": "out/requirefs.js",
+    "outDir": "out",
     "declaration": true
   },
   "include": [
+    "./lib",
     "./src"
   ]
 }
