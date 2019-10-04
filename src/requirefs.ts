@@ -63,6 +63,11 @@ export class RequireFS extends Resolver {
     let exports = {}
     const module = { exports, [originalExports]: exports }
 
+    // We must do this immediately in case of circular imports. This means that
+    // a circular import can't catch reassigned values but it's better than
+    // failing.
+    this.requireCache.set(resolvedPath, { exports })
+
     /* eslint-disable @typescript-eslint/no-unused-vars */
     // @ts-ignore
     const __dirname = path.dirname(resolvedPath)
@@ -98,7 +103,9 @@ export class RequireFS extends Resolver {
       }
     }
 
+    // Set it again in case it was reassigned.
     this.requireCache.set(resolvedPath, { exports })
+
     return exports
   }
 

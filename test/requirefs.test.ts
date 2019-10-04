@@ -92,5 +92,9 @@ for (let i = 0; i < tests.length; ++i) {
     it("should require function exported with module.exports", () => {
       assert.deepEqual(rfs.require("./function"), { test: "test", fn: "function" })
     })
+
+    it("should resolve circular imports", () => {
+      assert.deepEqual(rfs.require("./circular"), { circular: "hello", ralucric: "hello" })
+    })
   })
 }
