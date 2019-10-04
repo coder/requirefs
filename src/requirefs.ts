@@ -48,10 +48,8 @@ export class RequireFS extends Resolver {
    * will recursively follow the dependency tree and return any exported data.
    */
   private doRequire(importPath: string, directoryPath: string): Module {
-    // Use just the last element of the resolve path for the custom module name.
-    const customModName = path.basename(importPath)
-    if (this.customModules.has(customModName)) {
-      return this.customModules.get(customModName)
+    if (this.customModules.has(importPath)) {
+      return this.customModules.get(importPath)
     }
 
     const resolvedPath = this.resolvePath(importPath, directoryPath)
