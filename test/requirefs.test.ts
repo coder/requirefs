@@ -88,5 +88,9 @@ for (let i = 0; i < tests.length; ++i) {
     it("should resolve root", () => {
       assert.equal(rfs.require("."), "root")
     })
+
+    it("should require function exported with module.exports", () => {
+      assert.deepEqual(rfs.require("./function"), { test: "test", fn: "function" })
+    })
   })
 }

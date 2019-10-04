@@ -9,6 +9,8 @@ export interface FileReader {
   read(filePath: string): string
 }
 
+const originalExports = Symbol("originalExports")
+
 /**
  * Allow requiring modules and files from a provided file system.
  */
@@ -58,8 +60,8 @@ export class RequireFS extends Resolver {
     }
 
     // Provide globals that can be referenced in the `eval`.
-    const module = { exports: {} }
-    let exports = module.exports
+    let exports = {}
+    const module = { exports, [originalExports]: exports }
 
     /* eslint-disable @typescript-eslint/no-unused-vars */
     // @ts-ignore
@@ -85,12 +87,18 @@ export class RequireFS extends Resolver {
       exports = JSON.parse(content)
     } else {
       eval(`'use strict'; ${content}`)
+      // Both `exports` and `module.exports` might be reassigned so try using
+      // whatever was reassigned or isn't empty.
+      if (
+        exports === module[originalExports] &&
+        (module.exports !== module[originalExports] ||
+          (exports !== module.exports && Object.keys(module.exports).length > 0))
+      ) {
+        exports = module.exports
+      }
     }
 
-    if (Object.keys(exports).length > 0) {
-      this.requireCache.set(resolvedPath, { exports })
-    }
-
+    this.requireCache.set(resolvedPath, { exports })
     return exports
   }
 
