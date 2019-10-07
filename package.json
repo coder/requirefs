@@ -1,6 +1,6 @@
 {
   "name": "@coder/requirefs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "license": "MIT",
   "author": "Coder",
   "description": "Create a readable and requirable file system from tars, zips, or a custom provider.",
