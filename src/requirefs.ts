@@ -1,4 +1,4 @@
-import * as path from "../lib/path"
+import * as path from "./path"
 import { Resolver } from "./resolver"
 import { Tar } from "./tar"
 

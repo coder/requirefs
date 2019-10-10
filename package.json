@@ -1,17 +1,17 @@
 {
   "name": "@coder/requirefs",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "author": "Coder",
   "description": "Create a readable and requirable file system from tars, zips, or a custom provider.",
-  "main": "./out/src/requirefs",
-  "types": "./out/src/requirefs.d.ts",
+  "main": "./out/requirefs",
+  "types": "./out/requirefs.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register -r amd-loader ./test/*.test.ts",
     "lint": "eslint {src,test}/*.ts",
     "generateZip": "rm -f ./test/lib.zip && cd ./test/lib && zip -r ../lib.zip ./*",
     "generateTar": "rm -f ./test/lib.tar && tar -cf ./test/lib.tar -C ./test/lib .",
-    "prepublishOnly": "rm -rf ./out && tsc"
+    "prepublishOnly": "rm -rf ./out && tsc && browserify ./out/requirefs.js -s requirefs -o ./requirefs.js && rm ./out/*.js && mv ./requirefs.js ./out/requirefs.js"
   },
   "devDependencies": {
     "@types/jszip": "0.0.21-alpha",
@@ -21,6 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "amd-loader": "^0.0.8",
+    "browserify": "^16.5.0",
     "eslint": "^6.2.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",

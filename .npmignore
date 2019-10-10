@@ -3,9 +3,8 @@
 .gitignore
 .npmignore
 *.yaml
-/lib
 node_modules
-/src
+src
 test
 tsconfig.json
 yarn.lock

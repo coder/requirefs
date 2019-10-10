@@ -1,4 +1,4 @@
-import * as path from "../lib/path"
+import * as path from "./path"
 import { Reader } from "./reader"
 
 enum Type {
