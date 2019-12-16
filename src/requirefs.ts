@@ -6,7 +6,7 @@ type Module = any // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export interface FileReader {
   exists(filePath: string): boolean
-  read(filePath: string): string
+  read(filePath: string, encoding?: "utf8"): string | Uint8Array
 }
 
 const originalExports = Symbol("originalExports")
@@ -85,7 +85,7 @@ export class RequireFS extends Resolver {
     }
     /* eslint-enable @typescript-eslint/no-unused-vars */
 
-    const content = this.readFile(resolvedPath)
+    const content = this.readFile(resolvedPath, "utf8")
     if (/\.json$/.test(resolvedPath)) {
       exports = JSON.parse(content)
     } else {
@@ -123,8 +123,10 @@ export class RequireFS extends Resolver {
     return this.reader.exists(filePath)
   }
 
-  public readFile(filePath: string): string {
-    return this.reader.read(filePath)
+  public readFile(filePath: string): Uint8Array
+  public readFile(filePath: string, encoding: "utf8"): string
+  public readFile(filePath: string, encoding?: "utf8"): string | Uint8Array {
+    return this.reader.read(filePath, encoding)
   }
 }
 
@@ -137,12 +139,12 @@ export const fromTar = (content: Uint8Array): RequireFS => {
     exists: (filePath: string): boolean => {
       return !!tar.getFile(filePath)
     },
-    read: (filePath: string): string => {
+    read: (filePath: string, encoding?: "utf8"): string | Uint8Array => {
       const file = tar.getFile(filePath)
       if (!file) {
         throw new Error(`"${filePath}" does not exist`)
       }
-      return file.read("utf8")
+      return encoding ? file.read(encoding) : file.read()
     },
   })
 }
@@ -157,12 +159,12 @@ export const fromZip = (content: Uint8Array): RequireFS => {
     exists: (filePath: string): boolean => {
       return !!zip.file(filePath)
     },
-    read: (filePath: string): string => {
+    read: (filePath: string, encoding?: "utf8"): string | Uint8Array => {
       const file = zip.file(filePath)
       if (!file) {
         throw new Error(`"${filePath}" does not exist`)
       }
-      return zip.file(filePath).asText()
+      return encoding ? zip.file(filePath).asText() : zip.file(filePath).asUint8Array()
     },
   })
 }

@@ -17,7 +17,9 @@ export abstract class Resolver {
   }
 
   protected abstract isFile(filePath: string): boolean
-  protected abstract readFile(filePath: string): string
+
+  protected abstract readFile(filePath: string): Uint8Array
+  protected abstract readFile(filePath: string, encoding: "utf8"): string
 
   /**
    * Normalize and resolve importPath from directoryPath.
@@ -99,7 +101,7 @@ export abstract class Resolver {
   private maybeGetPackageJson(directoryPath: string): { main?: string } | undefined {
     const jsonPath = path.join(directoryPath, "package.json")
     if (this.isFile(jsonPath)) {
-      const body = this.readFile(jsonPath)
+      const body = this.readFile(jsonPath, "utf8")
       try {
         return JSON.parse(body)
       } catch (e) {

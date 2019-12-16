@@ -15,11 +15,13 @@ class TestResolver extends Resolver {
     }
   }
 
-  public readFile(filePath: string): string {
+  public readFile(filePath: string): Uint8Array
+  public readFile(filePath: string, encoding: "utf8"): string
+  public readFile(filePath: string, encoding?: "utf8"): string | Uint8Array {
     if (!filePath.startsWith("/")) {
       filePath = path.join(__dirname, filePath)
     }
-    return fs.readFileSync(filePath, "utf8")
+    return fs.readFileSync(filePath, encoding)
   }
 
   public resolve(importPath: string, basePath: string): string {

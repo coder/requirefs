@@ -96,5 +96,10 @@ for (let i = 0; i < tests.length; ++i) {
     it("should resolve circular imports", () => {
       assert.deepEqual(rfs.require("./circular"), { circular: "hello", ralucric: "hello" })
     })
+
+    it("should read files as strings and uint8array", async () => {
+      assert.deepEqual(rfs.readFile("customModule.js", "utf8"), await util.promisify(fs.readFile)(path.join(__dirname, "lib/customModule.js"), "utf8"))
+      assert.deepEqual(rfs.readFile("customModule.js"), await util.promisify(fs.readFile)(path.join(__dirname, "lib/customModule.js")))
+    })
   })
 }

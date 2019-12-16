@@ -29,6 +29,7 @@ describe("tar", () => {
           assert.notEqual(file, undefined)
           if (file && stat.isFile()) {
             assert.deepEqual(file.read(), await util.promisify(fs.readFile)(absolutePath))
+            assert.deepEqual(file.read("utf8"), await util.promisify(fs.readFile)(absolutePath, "utf8"))
           }
         }
       }
