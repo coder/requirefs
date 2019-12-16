@@ -123,7 +123,7 @@ export class RequireFS extends Resolver {
     return this.reader.exists(filePath)
   }
 
-  protected readFile(filePath: string): string {
+  public readFile(filePath: string): string {
     return this.reader.read(filePath)
   }
 }
