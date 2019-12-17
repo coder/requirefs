@@ -90,12 +90,12 @@ export class RequireFS extends Resolver {
       exports = JSON.parse(content)
     } else {
       eval(`'use strict'; ${content}`)
-      // Both `exports` and `module.exports` might be reassigned so try using
-      // whatever was reassigned or isn't empty.
+      // It's possible that `exports` or `module.exports` have been reassigned.
+      // In that case use the reassigned version, giving preference to
+      // `exports`.
       if (
-        exports === module[originalExports] &&
-        (module.exports !== module[originalExports] ||
-          (exports !== module.exports && Object.keys(module.exports).length > 0))
+        exports === module[originalExports] && // exports not reassigned
+        module.exports !== module[originalExports] // module.exports reassigned
       ) {
         exports = module.exports
       }

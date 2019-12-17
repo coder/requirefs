@@ -3,9 +3,23 @@ import * as fs from "fs"
 import * as util from "util"
 import { Reader } from "../src/reader"
 
+class TestDecoder {
+  public static called = 0;
+  private decoder = new (require("text-encoding").TextDecoder)()
+
+  public decode(data: Uint8Array): string {
+    ++TestDecoder.called
+    return this.decoder.decode(data)
+  }
+}
+
 describe("reader", () => {
   const content = Buffer.from("foo bar baz qux garply waldo fred plugh xyzzy thud mumble frobnozzle")
   const reader = new Reader(content)
+
+  after(() => {
+    ;(global as any).TextDecoder = undefined
+  })
 
   it("should have the offset at zero", () => {
     assert.equal(reader.offset, 0)
@@ -56,5 +70,13 @@ describe("reader", () => {
   it("should work with file buffer", async () => {
     const newReader = new Reader(await util.promisify(fs.readFile)(__filename))
     assert.equal(newReader.read(6, "utf8"), "import")
+  })
+
+  it("should use global TextDecoder if available", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(global as any).TextDecoder = TestDecoder
+    const reader = new Reader(content)
+    reader.peek(0, "utf8")
+    assert.equal(TestDecoder.called, 1)
   })
 })

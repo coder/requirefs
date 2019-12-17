@@ -71,6 +71,10 @@ for (let i = 0; i < tests.length; ++i) {
       assert.equal(rfs.require("customModule"), "ok")
     })
 
+    it("should fail to provide duplicate module", () => {
+      assert.throws(() => rfs.provide("donkey", "ok"), /already been registered/)
+    })
+
     it("should read custom module from cache", () => {
       assert.equal(rfs.require("./customModule"), "ok")
     })
@@ -98,8 +102,25 @@ for (let i = 0; i < tests.length; ++i) {
     })
 
     it("should read files as strings and uint8array", async () => {
-      assert.deepEqual(rfs.readFile("customModule.js", "utf8"), await util.promisify(fs.readFile)(path.join(__dirname, "lib/customModule.js"), "utf8"))
-      assert.deepEqual(rfs.readFile("customModule.js"), await util.promisify(fs.readFile)(path.join(__dirname, "lib/customModule.js")))
+      assert.deepEqual(
+        rfs.readFile("customModule.js", "utf8"),
+        await util.promisify(fs.readFile)(path.join(__dirname, "lib/customModule.js"), "utf8")
+      )
+      assert.deepEqual(
+        rfs.readFile("customModule.js"),
+        await util.promisify(fs.readFile)(path.join(__dirname, "lib/customModule.js"))
+      )
+    })
+
+    it("should fail to read or resolve non-existent files", () => {
+      assert.throws(() => rfs.require("./non-existent"), /Unable to resolve/)
+      assert.throws(() => rfs.readFile("./non-existent"), /does not exist/)
+    })
+
+    it("should handle export reassignment", () => {
+      assert.deepEqual(rfs.require("./reassign-both"), { qux: "exports" })
+      assert.deepEqual(rfs.require("./reassign-module"), { qux: "module.exports" })
+      assert.deepEqual(rfs.require("./reassign-exports"), { qux: "exports" })
     })
   })
 }

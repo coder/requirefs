@@ -75,8 +75,8 @@ export abstract class Resolver {
    */
   private maybeResolveDirectory(directoryPath: string): string | undefined {
     const json = this.maybeGetPackageJson(directoryPath)
-    const name = json && (json.module || json.main) || "index"
-    return this.maybeResolveFile(path.join(directoryPath, name))
+    const entry = (json && (json.module || json.main)) || "index"
+    return this.maybeResolveFile(path.join(directoryPath, entry))
   }
 
   /**
@@ -97,7 +97,7 @@ export abstract class Resolver {
   /**
    * Try getting a `package.json` from a directory.
    */
-  private maybeGetPackageJson(directoryPath: string): { main?: string, module?: string } | undefined {
+  private maybeGetPackageJson(directoryPath: string): { main?: string; module?: string } | undefined {
     const jsonPath = path.join(directoryPath, "package.json")
     if (this.isFile(jsonPath)) {
       const body = this.readFile(jsonPath, "utf8")

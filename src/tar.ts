@@ -89,7 +89,7 @@ export class Tar {
     const prefix = reader.jump(345).read(155, "utf8")
     return {
       name: (prefix ? prefix + "/" : "") + reader.jump(0).read(100, "utf8"),
-      size: parseInt(reader.jump(124).read(12, "utf8") || "0", 8),
+      size: parseInt(reader.jump(124).read(12, "utf8"), 8),
       type: reader.jump(156).read(1)[0] === 53 ? Type.Dir : Type.File,
     }
   }

@@ -25,12 +25,11 @@ describe("tar", () => {
           relativePath += "/"
           testDirectory(absolutePath)
         } else {
-          const file = tar.getFile(relativePath)
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          const file = tar.getFile(relativePath)!
           assert.notEqual(file, undefined)
-          if (file && stat.isFile()) {
-            assert.deepEqual(file.read(), await util.promisify(fs.readFile)(absolutePath))
-            assert.deepEqual(file.read("utf8"), await util.promisify(fs.readFile)(absolutePath, "utf8"))
-          }
+          assert.deepEqual(file.read(), await util.promisify(fs.readFile)(absolutePath))
+          assert.deepEqual(file.read("utf8"), await util.promisify(fs.readFile)(absolutePath, "utf8"))
         }
       }
     }

@@ -32,6 +32,13 @@ class TestResolver extends Resolver {
 describe("resolver", () => {
   const resolver = new TestResolver()
 
+  it("should set extensions with or without the dot", () => {
+    resolver.extensions = ["js"]
+    assert.equal(resolver.resolve("./lib", __dirname), path.join(__dirname, "./lib/index.js"))
+    resolver.extensions = [".js"]
+    assert.equal(resolver.resolve("./lib", __dirname), path.join(__dirname, "./lib/index.js"))
+  })
+
   it("should resolve relative paths", () => {
     assert.equal(resolver.resolve("./lib/scope", __dirname), path.join(__dirname, "./lib/scope.js"))
     assert.equal(resolver.resolve("./scope", path.join(__dirname, "lib")), path.join(__dirname, "./lib/scope.js"))
@@ -107,5 +114,13 @@ describe("resolver", () => {
       resolver.resolve(".////baseFolder/../baseFolder", ".///lib/baseFolder///../baseFolder///.."),
       "lib/baseFolder/index.js"
     )
+  })
+
+  it("should resolve module", () => {
+    assert.equal(resolver.resolve("frogger", "./lib"), "lib/node_modules/frogger/index.js")
+  })
+
+  it("should fail to resolve module", () => {
+    assert.throws(() => resolver.resolve("frogger", "./"), /Unable to resolve/)
   })
 })
