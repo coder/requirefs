@@ -4,8 +4,8 @@ import * as util from "util"
 import { Reader } from "../src/reader"
 
 class TestDecoder {
-  public static called = 0;
-  private decoder = new (require("text-encoding").TextDecoder)()
+  public static called = 0
+  private decoder = new (require("text-encoding")).TextDecoder()
 
   public decode(data: Uint8Array): string {
     ++TestDecoder.called
@@ -18,6 +18,7 @@ describe("reader", () => {
   const reader = new Reader(content)
 
   after(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(global as any).TextDecoder = undefined
   })
 

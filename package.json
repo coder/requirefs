@@ -13,7 +13,7 @@
     "generateZip": "cd ./test/lib && zip -q -r ../lib.zip ./*",
     "generateTar": "tar -cf ./test/lib.tar -C ./test/lib .",
     "generate": "rm -f ./test/*.{tar,zip} && yarn generateZip && yarn generateTar",
-    "prepublishOnly": "rm -rf ./out && tsc && browserify ./out/requirefs.js -s requirefs -o ./requirefs.js && rm ./out/*.{js,map} && mv ./requirefs.js ./out/requirefs.js"
+    "prepublishOnly": "rm -rf ./out && tsc && browserify ./out/requirefs.js -s requirefs -o ./requirefs.js && rm -f ./out/*.{js,map} && mv ./requirefs.js ./out/requirefs.js"
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",
@@ -42,7 +42,6 @@
     "@types/node": "^12.12.20",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
-    "amd-loader": "^0.0.8",
     "browserify": "^16.5.0",
     "eslint": "^6.2.0",
     "eslint-config-prettier": "^6.0.0",
@@ -52,10 +51,9 @@
     "nyc": "^14.1.1",
     "prettier": "^1.18.2",
     "source-map-support": "^0.5.16",
-    "tar-fs": "^2.0.0",
     "text-encoding": "^0.7.0",
     "ts-node": "^8.3.0",
-    "typescript": "~3.5.0"
+    "typescript": "^3.5.0"
   },
   "optionalDependencies": {
     "jszip": "2.6.0"
