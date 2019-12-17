@@ -70,14 +70,13 @@ export abstract class Resolver {
 
   /**
    * Try resolving using `package.json` inside a directory. If there is no
-   * `package.json`, load the index file if there is one instead.
+   * `package.json` or no `module` nor `main` specified within it, load the
+   * index file if there is one instead.
    */
   private maybeResolveDirectory(directoryPath: string): string | undefined {
     const json = this.maybeGetPackageJson(directoryPath)
-    if (json && json.main) {
-      return this.maybeResolveFile(path.join(directoryPath, json.main))
-    }
-    return this.maybeResolveFile(path.join(directoryPath, "index"))
+    const name = json && (json.module || json.main) || "index"
+    return this.maybeResolveFile(path.join(directoryPath, name))
   }
 
   /**
@@ -98,7 +97,7 @@ export abstract class Resolver {
   /**
    * Try getting a `package.json` from a directory.
    */
-  private maybeGetPackageJson(directoryPath: string): { main?: string } | undefined {
+  private maybeGetPackageJson(directoryPath: string): { main?: string, module?: string } | undefined {
     const jsonPath = path.join(directoryPath, "package.json")
     if (this.isFile(jsonPath)) {
       const body = this.readFile(jsonPath, "utf8")

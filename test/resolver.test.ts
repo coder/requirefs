@@ -69,11 +69,15 @@ describe("resolver", () => {
   })
 
   it("should resolve using package.json", () => {
-    assert.equal(resolver.resolve("./lib", __dirname), path.join(__dirname, "./lib/index.js"))
-    assert.throws(
-      () => resolver.resolve("./lib/subfolder/deepfolder", __dirname),
-      /Unable to resolve/ // Because `main` is a directory.
-    )
+    const properties = ["main", "module"]
+    for (let i = 0; i < properties.length; ++i) {
+      const property = properties[i]
+      assert.equal(resolver.resolve(`./lib/${property}`, __dirname), path.join(__dirname, `./lib/${property}/entry.js`))
+      assert.throws(
+        () => resolver.resolve(`./lib/${property}/subfolder`, __dirname),
+        /Unable to resolve/ // Because it's a directory.
+      )
+    }
   })
 
   it("should resolve using index", () => {
