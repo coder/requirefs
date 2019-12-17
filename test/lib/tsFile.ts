@@ -1,3 +1,3 @@
 exports = {
-	obi: "Why, hello there!",
-};
+  obi: "Why, hello there!",
+}
