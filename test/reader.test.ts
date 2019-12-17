@@ -5,7 +5,7 @@ import { Reader } from "../src/reader"
 
 class TestDecoder {
   public static called = 0
-  private decoder = new (require("text-encoding")).TextDecoder()
+  private decoder = new (require("text-encoding").TextDecoder)()
 
   public decode(data: Uint8Array): string {
     ++TestDecoder.called
