@@ -7,11 +7,12 @@
   "main": "./out/requirefs",
   "types": "./out/requirefs.d.ts",
   "scripts": {
-    "test": "yarn generateZip && yarn generateTar && mocha",
-    "coverage": "yarn generateZip && yarn generateTar && nyc mocha",
+    "test": "yarn generate && mocha",
+    "coverage": "yarn generate && nyc mocha",
     "lint": "eslint {src,test}/*.ts",
-    "generateZip": "rm -f ./test/lib.zip && cd ./test/lib && zip -q -r ../lib.zip ./*",
-    "generateTar": "rm -f ./test/lib.tar && tar -cf ./test/lib.tar -C ./test/lib .",
+    "generateZip": "cd ./test/lib && zip -q -r ../lib.zip ./*",
+    "generateTar": "tar -cf ./test/lib.tar -C ./test/lib .",
+    "generate": "rm -f ./test/*.{tar,zip} && yarn generateZip && yarn generateTar",
     "prepublishOnly": "rm -rf ./out && tsc && browserify ./out/requirefs.js -s requirefs -o ./requirefs.js && rm ./out/*.{js,map} && mv ./requirefs.js ./out/requirefs.js"
   },
   "nyc": {
@@ -29,17 +30,16 @@
       "html"
     ],
     "all": true,
-    "lines": 100,
-    "statements": 100,
-    "functions": 100,
-    "branches": 100
+    "lines": 95,
+    "statements": 95,
+    "functions": 95,
+    "branches": 95
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "@types/jszip": "0.0.21-alpha",
     "@types/mocha": "2.2.39",
-    "@types/tar-fs": "^1.16.1",
-    "@types/tar-stream": "^1.6.1",
+    "@types/node": "^12.12.20",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "amd-loader": "^0.0.8",
