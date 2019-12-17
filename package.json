@@ -7,10 +7,10 @@
   "main": "./out/requirefs",
   "types": "./out/requirefs.d.ts",
   "scripts": {
-    "test": "mocha",
-    "coverage": "nyc mocha",
+    "test": "yarn generateZip && yarn generateTar && mocha",
+    "coverage": "yarn generateZip && yarn generateTar && nyc mocha",
     "lint": "eslint {src,test}/*.ts",
-    "generateZip": "rm -f ./test/lib.zip && cd ./test/lib && zip -r ../lib.zip ./*",
+    "generateZip": "rm -f ./test/lib.zip && cd ./test/lib && zip -q -r ../lib.zip ./*",
     "generateTar": "rm -f ./test/lib.tar && tar -cf ./test/lib.tar -C ./test/lib .",
     "prepublishOnly": "rm -rf ./out && tsc && browserify ./out/requirefs.js -s requirefs -o ./requirefs.js && rm ./out/*.{js,map} && mv ./requirefs.js ./out/requirefs.js"
   },
