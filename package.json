@@ -9,7 +9,7 @@
   "scripts": {
     "test": "yarn generate && mocha",
     "coverage": "yarn generate && nyc mocha",
-    "lint": "eslint {src,test} --ext .ts",
+    "lint": "eslint src test --ext .ts",
     "generateZip": "cd ./test/lib && zip -q -r ../lib.zip ./*",
     "generateTar": "tar -cf ./test/lib.tar -C ./test/lib .",
     "generate": "rm -f ./test/*.{tar,zip} && yarn generateZip && yarn generateTar",
