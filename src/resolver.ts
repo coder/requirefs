@@ -75,7 +75,7 @@ export abstract class Resolver {
    */
   private maybeResolveDirectory(directoryPath: string): string | undefined {
     const json = this.maybeGetPackageJson(directoryPath)
-    const entry = (json && (json.module || json.main)) || "index"
+    const entry = (json && (json.main || json.module)) || "index"
     return this.maybeResolveFile(path.join(directoryPath, entry))
   }
 
