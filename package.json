@@ -1,6 +1,6 @@
 {
   "name": "@coder/requirefs",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "license": "MIT",
   "author": "Coder",
   "description": "Create a readable and requirable file system from tars, zips, or a custom provider.",
@@ -11,7 +11,7 @@
     "coverage": "yarn generate && nyc mocha",
     "lint": "eslint src test --ext .ts",
     "generateZip": "cd ./test/lib && zip -q -r ../lib.zip ./*",
-    "generateTar": "tar -cf ./test/lib.tar -C ./test/lib .",
+    "generateTar": "tar -cf ./test/lib.tar -C ./test/lib . && gzip --force --keep ./test/lib.tar",
     "generate": "rm -f ./test/*.{tar,zip} && yarn generateZip && yarn generateTar",
     "prepublishOnly": "rm -rf ./out && tsc && browserify --node --no-bundle-external ./out/requirefs.js --standalone requirefs --outfile ./requirefs.js && rm -f ./out/*.{js,map} && mv ./requirefs.js ./out/requirefs.js"
   },

@@ -35,6 +35,10 @@ export class Tar {
 
   public static fromUint8Array(array: Uint8Array): Tar {
     const reader = new Reader(array)
+    const gzipBytes = reader.peek(2)
+    if (gzipBytes[0] === 0x1f && gzipBytes[1] === 0x8b) {
+      throw new Error("gzipped tars are not supported")
+    }
     const tar = new Tar()
     let file: TarFile | undefined
     while ((file = Tar.getNextFile(reader))) {

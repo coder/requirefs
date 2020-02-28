@@ -11,7 +11,7 @@ for (let i = 0; i < tests.length; ++i) {
     let rfs: RequireFS
     before(async () => {
       const content = await util.promisify(fs.readFile)(path.join(__dirname, `lib.${name}`))
-      rfs = name === "tar" ? fromTar(content) : fromZip(content)
+      rfs = name === "zip" ? fromZip(content) : fromTar(content)
     })
 
     beforeEach(() => {
@@ -121,6 +121,13 @@ for (let i = 0; i < tests.length; ++i) {
       assert.deepEqual(rfs.require("./reassign-both"), { qux: "exports" })
       assert.deepEqual(rfs.require("./reassign-module"), { qux: "module.exports" })
       assert.deepEqual(rfs.require("./reassign-exports"), { qux: "exports" })
+    })
+  })
+
+  describe("tar.gz", () => {
+    it("should throw an error", async () => {
+      const content = await util.promisify(fs.readFile)(path.join(__dirname, "lib.tar.gz"))
+      assert.throws(() => fromTar(content), /gzipped tars are not supported/)
     })
   })
 }
